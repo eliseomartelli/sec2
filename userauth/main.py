@@ -1,4 +1,5 @@
-from utils.plotting import plot_roc_curve, plot_performance
+from utils.plotting import (
+    plot_roc_curve, plot_performance, plot_precision_recall_curve)
 from utils.cache import load_models, save_models, delete_cache_file
 import argparse
 from data import load_data
@@ -34,6 +35,7 @@ def main(remove_cache=False, tune=False):
 
     plot_roc_curve(results)
     plot_performance(results)
+    plot_precision_recall_curve(results)
 
 
 if __name__ == "__main__":
