@@ -3,7 +3,7 @@ from utils.plotting import (
 from utils.cache import load_models, save_models, delete_cache_file
 import argparse
 from data import load_data
-from models import (define_models, train_and_evaluate, tune_models,
+from models import (define_models, train_models, evaluate_models, tune_models,
                     define_param_grid)
 
 
@@ -15,23 +15,22 @@ def main(remove_cache=False, tune=False):
 
     X_train, X_test, y_train, y_test = load_data()
 
-    trained_models = load_models(cache_file)
-    if trained_models is None:
+    models = load_models(cache_file)
+    if models is None:
         print("No cached models found. Training new models.")
         models, param_grids = define_models(), define_param_grid()
         if tune:
             models = tune_models(models, param_grids, X_train, y_train)
+        else:
+            models = train_models(models, X_train, y_train)
 
-        results, trained_models = train_and_evaluate(
-            models, X_train, X_test, y_train, y_test
-        )
-
-        save_models(trained_models, cache_file)
+        save_models(models, cache_file)
     else:
         print("Loaded cached models.")
-        results, _ = train_and_evaluate(
-            trained_models, X_train, X_test, y_train, y_test, from_loaded=True
-        )
+
+    results = evaluate_models(
+        models, X_test, y_test
+    )
 
     plot_roc_curve(results)
     plot_performance(results)

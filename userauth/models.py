@@ -45,38 +45,59 @@ def define_param_grid():
     }
 
 
-def train_and_evaluate(models, X_train, X_test, y_train, y_test,
-                       from_loaded=False):
-    """Train models, evaluate accuracy, ROC, and AUC."""
+def train_model(model, X_train, y_train):
+    """Trains a single model."""
+    model.fit(X_train, y_train)
+    return model
+
+
+def evaluate_model(model, X_test, y_test):
+    """
+    Evaluate a single model on test data.
+
+    Returns:
+    - results: Dictionary with accuracy, ROC, and Precision-Recall metrics.
+    """
     results = {}
+
+    y_pred = model.predict(X_test)
+    results["accuracy"] = accuracy_score(y_test, y_pred)
+
+    print(classification_report(y_test, y_pred))
+
+    # ROC metrics
+    y_scores = model.predict_proba(X_test)[:, 1]
+    fpr, tpr, auc_roc = custom_roc_auc(y_test, y_scores)
+    results["fpr"] = fpr
+    results["tpr"] = tpr
+    results["auc"] = auc_roc
+
+    # Precision-Recall metrics
+    precision, recall, _ = precision_recall_curve(y_test, y_scores)
+    auc_pr = auc(recall, precision)
+    results["precision"] = precision
+    results["recall"] = recall
+    results["auc_pr"] = auc_pr
+
+    return results
+
+
+def train_models(models, X_train, y_train):
+    """Train models."""
     trained_models = {}
-
     for name, model in models.items():
-        if not from_loaded:
-            model.fit(X_train, y_train)
-        trained_models[name] = model
+        print(f"--- Training {name} ---")
+        trained_models[name] = train_model(model, X_train, y_train)
+    return trained_models
 
-        y_pred = model.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        results[name] = {"accuracy": acc}
 
-        print(f"--- {name} ---")
-        print(classification_report(y_test, y_pred))
-
-        y_scores = model.predict_proba(X_test)[:, 1]
-        fpr, tpr, auc_roc = custom_roc_auc(y_test, y_scores)
-
-        results[name]["fpr"] = fpr
-        results[name]["tpr"] = tpr
-        results[name]["auc"] = auc_roc
-
-        precision, recall, _ = precision_recall_curve(y_test, y_scores)
-        auc_pr = auc(recall, precision)
-        results[name]["precision"] = precision
-        results[name]["recall"] = recall
-        results[name]["auc_pr"] = auc_pr
-
-    return results, trained_models
+def evaluate_models(models, X_test, y_test):
+    """Evaluate models."""
+    results = {}
+    for name, model in models.items():
+        print(f"--- Evaluating {name} ---")
+        results[name] = evaluate_model(model, X_test, y_test)
+    return results
 
 
 def tune_models(models, param_grids, X_train, y_train):
