@@ -106,4 +106,4 @@ def tune_models(models, param_grids, X_train, y_train):
             # No tuning grid provided, use the original model
             best_models[name] = model
 
-            return best_models
+    return best_models
