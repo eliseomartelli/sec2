@@ -17,13 +17,14 @@ def main(remove_cache=False, tune=False):
     trained_models = load_models(cache_file)
     if trained_models is None:
         print("No cached models found. Training new models.")
-        models = define_models()
+        models, param_grids = define_models(), define_param_grid()
         if tune:
-            models = tune_models(
-                models, define_param_grid(), X_train, y_train)
+            models = tune_models(models, param_grids, X_train, y_train)
+
         results, trained_models = train_and_evaluate(
             models, X_train, X_test, y_train, y_test
         )
+
         save_models(trained_models, cache_file)
     else:
         print("Loaded cached models.")
