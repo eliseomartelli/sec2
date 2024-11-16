@@ -1,9 +1,12 @@
+from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from utils.metrics import custom_roc_auc
-from sklearn.metrics import accuracy_score, classification_report
-from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import (
+    accuracy_score,
+    classification_report, precision_recall_curve,
+    auc)
 
 
 def define_models():
@@ -61,11 +64,17 @@ def train_and_evaluate(models, X_train, X_test, y_train, y_test,
         print(classification_report(y_test, y_pred))
 
         y_scores = model.predict_proba(X_test)[:, 1]
-        fpr, tpr, auc = custom_roc_auc(y_test, y_scores)
+        fpr, tpr, auc_roc = custom_roc_auc(y_test, y_scores)
 
         results[name]["fpr"] = fpr
         results[name]["tpr"] = tpr
-        results[name]["auc"] = auc
+        results[name]["auc"] = auc_roc
+
+        precision, recall, _ = precision_recall_curve(y_test, y_scores)
+        auc_pr = auc(recall, precision)
+        results[name]["precision"] = precision
+        results[name]["recall"] = recall
+        results[name]["auc_pr"] = auc_pr
 
     return results, trained_models
 
