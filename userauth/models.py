@@ -11,21 +11,11 @@ def define_models():
     return {
         "Random Forest": RandomForestClassifier(
             random_state=1234,
-            max_depth=20,
-            max_features="sqrt",
-            n_estimators=100,
         ),
         "KNN": KNeighborsClassifier(
-            algorithm="auto",
-            n_neighbors=10,
-            weights="distance",
         ),
         "MLP": MLPClassifier(
             random_state=1234,
-            activation="relu",
-            hidden_layer_sizes=(100, 50),
-            max_iter=500,
-            solver="adam",
         ),
     }
 
