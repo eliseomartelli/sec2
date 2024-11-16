@@ -33,14 +33,16 @@ def plot_performance(results):
     plt.figure(figsize=(12, 6))
 
     plt.subplot(1, 2, 1)
-    sns.barplot(x=list(results.keys()), y=accuracy_values, palette="viridis")
+    sns.barplot(x=list(results.keys()), y=accuracy_values,
+                palette="viridis", hue=list(results.keys()))
     plt.title("Model Performance (Accuracy)")
     plt.xlabel("Model")
     plt.ylabel("Accuracy")
     plt.ylim(0, 1)
 
     plt.subplot(1, 2, 2)
-    sns.barplot(x=list(results.keys()), y=auc_values, palette="viridis")
+    sns.barplot(x=list(results.keys()), y=auc_values,
+                palette="viridis", hue=list(results.keys()))
     plt.title("Model Performance (AUC)")
     plt.xlabel("Model")
     plt.ylabel("AUC")
