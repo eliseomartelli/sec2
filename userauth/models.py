@@ -21,7 +21,30 @@ def define_models():
     }
 
 
-def train_and_evaluate(models, X_train, X_test, y_train, y_test, from_loaded=False):
+def define_param_grid():
+    """Return a dictionary of model names and their parameter grids."""
+    return {
+        "Random Forest": {
+            "n_estimators": [10, 50, 100],
+            "max_depth": [5, 10, 20],
+            "max_features": ["sqrt", "log2"],
+        },
+        "KNN": {
+            "n_neighbors": [5, 10, 15],
+            "weights": ["uniform", "distance"],
+            "algorithm": ["auto", "ball_tree", "kd_tree"],
+        },
+        "MLP": {
+            "hidden_layer_sizes": [(50,), (100,), (100, 50)],
+            "solver": ["adam", "sgd"],
+            "activation": ["relu", "tanh"],
+            "max_iter": [500, 1000],
+        },
+    }
+
+
+def train_and_evaluate(models, X_train, X_test, y_train, y_test,
+                       from_loaded=False):
     """Train models, evaluate accuracy, ROC, and AUC."""
     results = {}
     trained_models = {}
@@ -39,10 +62,10 @@ def train_and_evaluate(models, X_train, X_test, y_train, y_test, from_loaded=Fal
         print(classification_report(y_test, y_pred))
 
         y_scores = model.predict_proba(X_test)[:, 1]
-        fpr, tpr, auc_value = custom_roc_auc(y_test, y_scores)
+        fpr, tpr, auc = custom_roc_auc(y_test, y_scores)
 
         results[name]["fpr"] = fpr
         results[name]["tpr"] = tpr
-        results[name]["auc"] = auc_value
+        results[name]["auc"] = auc
 
     return results, trained_models
