@@ -24,27 +24,20 @@ def define_param_grid():
     """Return a dictionary of model names and their parameter grids."""
     return {
         "Random Forest": {
-            "n_estimators": [10, 50, 100, 200],
-            "max_depth": [5, 10, 20, None],
-            "max_features": ["sqrt", "log2", None],
-            "min_samples_split": [2, 5, 10],
-            "min_samples_leaf": [1, 2, 4],
-            "bootstrap": [True, False],
+            "n_estimators": [10, 50, 100],
+            "max_depth": [5, 10, 20],
+            "max_features": ["sqrt", "log2"],
         },
         "KNN": {
-            "n_neighbors": [3, 5, 10, 15, 20],
+            "n_neighbors": [5, 10, 15],
             "weights": ["uniform", "distance"],
-            "algorithm": ["auto", "ball_tree", "kd_tree", "brute"],
-            "leaf_size": [10, 30, 50],
-            "p": [1, 2],  # 1 for Manhattan distance, 2 for Euclidean
+            "algorithm": ["auto", "ball_tree", "kd_tree"],
         },
         "MLP": {
-            "hidden_layer_sizes": [(50,), (100,), (100, 50), (150, 100, 50)],
-            "solver": ["adam", "sgd", "lbfgs"],
-            "activation": ["relu", "tanh", "logistic"],
-            "alpha": [0.0001, 0.001, 0.01, 0.1],  # Regularization term
-            "learning_rate": ["constant", "invscaling", "adaptive"],
-            "max_iter": [500, 1000, 2000],
+            "hidden_layer_sizes": [(50,), (100,), (100, 50)],
+            "solver": ["adam", "sgd"],
+            "activation": ["relu", "tanh"],
+            "max_iter": [500, 1000],
         },
     }
 
