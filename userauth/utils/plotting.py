@@ -50,3 +50,32 @@ def plot_performance(results):
 
     plt.tight_layout()
     plt.show()
+
+
+def plot_precision_recall_curve(results):
+    """
+    Plot the Precision-Recall curve for all models.
+
+    Parameters:
+    - results: Dictionary containing 'precision', 'recall', and 'auc_pr' for
+    each model.
+    """
+    plt.figure(figsize=(8, 6))
+
+    for name, result in results.items():
+        precision = result.get("precision", [])
+        recall = result.get("recall", [])
+        auc_pr = result.get("auc_pr", 0)
+
+        if (precision is not None and recall is not None
+                and precision.size > 0 and recall.size > 0):
+            plt.plot(recall, precision, label=f'{
+                     name} (AUC = {auc_pr:.2f})', linewidth=2)
+
+    plt.title('Precision-Recall Curve')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.legend(loc='lower left')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
