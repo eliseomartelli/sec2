@@ -1,10 +1,10 @@
-from utils.plotting import (
-    plot_roc_curve, plot_performance, plot_precision_recall_curve)
+from utils.plotting import (plot_roc_curve, plot_performance,
+                            plot_precision_recall_curve)
 from utils.cache import load_models, save_models, delete_cache_file
 import argparse
 from data import load_data
-from models import (define_models, train_models, evaluate_models, tune_models,
-                    define_param_grid)
+from models import (define_models, train_models, evaluate_models,
+                    tune_models, define_param_grid)
 
 
 def main(remove_cache=False, tune=False):
