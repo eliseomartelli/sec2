@@ -23,7 +23,8 @@ def define_models():
         "MLP": MLPClassifier(
             random_state=1234,
             hidden_layer_sizes=(100,),
-            max_iter=500,
+            max_iter=1000,
+            alpha=1,
         ),
     }
 
