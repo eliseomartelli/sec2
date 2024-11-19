@@ -119,4 +119,3 @@ def draw_interface(models):
         pygame.display.flip()
 
     pygame.quit()
-
