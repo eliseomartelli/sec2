@@ -13,7 +13,7 @@ def load_data():
 
     # Split dataset into training and testing
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y_relabel, train_size=0.2, stratify=y_relabel, random_state=1234
+        X, y_relabel, train_size=0.8, stratify=y_relabel, random_state=1234
     )
 
     return X_train, X_test, y_train, y_test
