@@ -75,7 +75,7 @@ def evaluate_model(model, X_test, y_test):
 
     # ROC metrics
     y_scores = model.predict_proba(X_test)[:, 1]
-    fpr, tpr, auc_roc = custom_roc_auc(y_test, y_scores)
+    fpr, tpr, auc_roc, _, _, _, _n = custom_roc_auc(y_test, y_scores)
     results["fpr"] = fpr
     results["tpr"] = tpr
     results["auc"] = auc_roc
