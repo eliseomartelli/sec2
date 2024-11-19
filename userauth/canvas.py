@@ -48,9 +48,6 @@ def preprocess_canvas(screen):
     """
     pixel_data = pygame.surfarray.array3d(screen)
     grayscale = np.mean(pixel_data, axis=2)
-
-    grayscale = 255 - grayscale
-
     image = Image.fromarray(grayscale).convert("L")
     image = image.resize((28, 28))
 
