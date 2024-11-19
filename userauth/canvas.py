@@ -49,13 +49,11 @@ def preprocess_canvas(screen):
     pixel_data = pygame.surfarray.array3d(screen)
     grayscale = np.mean(pixel_data, axis=2)
     image = Image.fromarray(grayscale).convert("L")
-    image = image.resize((28, 28))
-
-    image_array = np.array(image) / 255.0
-
-    flattened_array = image_array.flatten().reshape(
-        1, -1)
-
+    image = image.resize((28, 28), resample=Image.BICUBIC)
+    image = image.rotate(90)
+    image = image.transpose(method=Image.FLIP_TOP_BOTTOM)
+    image_array = np.array(image)
+    flattened_array = image_array.flatten().reshape(1, -1)
     column_names = [f"pixel{i+1}" for i in range(flattened_array.shape[1])]
 
     return pd.DataFrame(flattened_array, columns=column_names)
