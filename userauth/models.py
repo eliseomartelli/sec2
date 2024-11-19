@@ -27,6 +27,7 @@ def define_models():
             hidden_layer_sizes=(100, 50,),
             max_iter=500,
             solver="sgd",
+        ),
     }
 
 
