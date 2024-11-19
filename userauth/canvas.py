@@ -47,7 +47,6 @@ def preprocess_canvas(screen):
     same columns as the training data (784 features for 28x28 image).
     """
     pixel_data = pygame.surfarray.array3d(screen)
-
     grayscale = np.mean(pixel_data, axis=2)
 
     grayscale = 255 - grayscale
