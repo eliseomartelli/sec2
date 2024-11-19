@@ -19,6 +19,7 @@ def define_models():
         "KNN": KNeighborsClassifier(
             n_neighbors=15,
             weights="distance",
+            algorithm="auto",
         ),
         "MLP": MLPClassifier(
             random_state=1234,
