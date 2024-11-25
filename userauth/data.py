@@ -53,8 +53,9 @@ def socofing_data_loader_util(dataset_paths=["./SOCOFing/Real"],
 
         for file in image_files:
             img_path = os.path.join(dataset_path, file)
-            img = Image.open(img_path).convert('L')
-            img = img.resize((128, 128))
+            with Image.open(img_path) as img:
+                img = img.convert('L')
+                img = img.resize((128, 128))
             img = np.array(img) / 255.0
             img = img.flatten()
 
