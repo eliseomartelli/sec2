@@ -96,3 +96,21 @@ def socofing_data_loader_util(
         X = mds.fit_transform(X)
 
     return X, y
+
+def load_data_from_npz(filename):
+    """Load data from a .npz file if it exists."""
+    if os.path.exists(filename):
+        print(f"Loading data from {filename}")
+        data = np.load(filename)
+        X = data["X"]
+        y = data["y"]
+        return X, y
+    else:
+        print(f"{filename} not found. Returning None.")
+        return None, None
+
+
+def save_data_to_npz(X, y, filename):
+    """Save the dataset to a .npz file."""
+    np.savez_compressed(filename, X=X, y=y)
+    print(f"Data saved to {filename}")
