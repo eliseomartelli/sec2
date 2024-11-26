@@ -23,27 +23,40 @@ def load_data():
 
 def load_data_SOCOfing():
     """Load SOCOFing dataset."""
-    X_train, y_train = socofing_data_loader_util(dataset_paths=[
-        "./SOCOFing/Real",
-        "./SOCOFing/Altered/Altered-Hard",
-        "./SOCOFing/Altered/Altered-Medium",
-    ])
+    X, y = socofing_data_loader_util(
+        anomaly_fingers=None,
+        dataset_paths=[
+            "./SOCOFing/Real/",
+            "./SOCOFing/Altered/Altered-Easy/",
+            "./SOCOFing/Altered/Altered-Medium/",
+            "./SOCOFing/Altered/Altered-Hard/",
+        ])
 
-    X_test, y_test = socofing_data_loader_util(
-        dataset_paths=["./SOCOFing/Altered/Altered-Easy"])
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, train_size=0.8, stratify=y, random_state=1234
+    )
 
     return X_train, X_test, y_train, y_test
 
 
-def socofing_data_loader_util(dataset_paths=["./SOCOFing/Real"],
-                              anomaly_finger='Left_index_finger'):
+def socofing_data_loader_util(
+        dataset_paths,
+        anomaly_fingers=[
+            "Left_index_finger",
+            "Left_little_finger",
+            "Left_middle_finger",
+            "Left_ring_finger",
+            "Left_thumb_finger",
+        ],
+        anomaly_userids=[
+            str(number) for number in range(20)
+        ],
+        dimensionality_reduction=True,
+        components=100):
     """
     Load and preprocess the SOCOFing dataset.
-    Parameters:
-        dataset_path (str): Path to the SOCOFing dataset folder (Real images).
-
     Returns:
-        X_train, X_test, y_train, y_test: Preprocessed and split dataset.
+        X, y: Preprocessed dataset.
     """
     X = []
     y = []
@@ -53,20 +66,33 @@ def socofing_data_loader_util(dataset_paths=["./SOCOFing/Real"],
 
         for file in image_files:
             img_path = os.path.join(dataset_path, file)
-            with Image.open(img_path) as img:
-                img = img.convert('L')
-                img = img.resize((128, 128))
-            img = np.array(img) / 255.0
-            img = img.flatten()
+            img = Image.open(img_path)
+            img = img.convert('L')
+            img = img.resize((128, 128))
+            image_array = np.array(img).flatten()
+            img.close()
 
-            _, finger_type = file.split('__')
+            user_id, rest_of_string = file.split('__')
+            finger_type = "_".join(
+                rest_of_string.split('.')[0].split('_')[1:4])
 
-            if anomaly_finger in finger_type:
-                label = 1
-            else:
-                label = 0
+            label = int(
+                (user_id in anomaly_userids)
+                and (
+                    (anomaly_fingers is None) or
+                    (finger_type in anomaly_fingers)
+                )
+            )
 
-            X.append(img)
+            X.append(image_array)
             y.append(label)
 
-    return np.array(X), np.array(y)
+    X = np.array(X)
+    y = np.array(y)
+
+    if dimensionality_reduction:
+        from sklearn.manifold import MDS
+        mds = MDS(n_components=components, random_state=1234)
+        X = mds.fit_transform(X)
+
+    return X, y
