@@ -5,7 +5,6 @@ import argparse
 from data import load_data, load_data_SOCOfing
 from models import (define_models, train_models, evaluate_models,
                     tune_models, define_param_grid)
-from canvas import (draw_interface)
 
 
 def main(remove_cache=False, tune=False, evaluate=True, draw=False,
@@ -42,6 +41,7 @@ def main(remove_cache=False, tune=False, evaluate=True, draw=False,
         plot_performance(results)
         plot_precision_recall_curve(results)
     if draw:
+        from canvas import (draw_interface)
         draw_interface(models)
 
 
