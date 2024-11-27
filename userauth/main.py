@@ -8,8 +8,9 @@ from models import (define_models, train_models, evaluate_models,
 
 
 def main(remove_cache=False, tune=False, evaluate=True, draw=False,
-         socofing=False):
-    cache_file = 'trained_models.pkl'
+         socofing=False,
+         cache_file='trained_models.pkl'
+         ):
 
     if remove_cache:
         delete_cache_file(cache_file)
@@ -76,9 +77,16 @@ if __name__ == "__main__":
         help="Enable drawing.",
         default=False,
     )
+    parser.add_argument(
+        "--cache-file",
+        type=str,
+        help="Specify the cache file to use.",
+        default="trained_models.pkl",
+    )
     args = parser.parse_args()
     main(remove_cache=args.remove_cache,
          tune=args.tune,
          evaluate=args.eval_disable,
          draw=args.draw,
-         socofing=args.socofing)
+         socofing=args.socofing,
+         cache_file=args.cache_file)
