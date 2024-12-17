@@ -1,0 +1,6 @@
+AuthType Basic
+AuthName "Restricted Access"
+AuthBasicProvider file
+AuthUserFile /etc/apache2/passwords
+AuthGroupFile /etc/apache2/groups
+Require group plumbers
