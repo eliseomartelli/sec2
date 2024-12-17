@@ -1,0 +1,13 @@
+CA.key
+CA.pub
+ca-bundle.crt
+ca.srl
+client.crt
+client.key
+client.p12
+client.pub
+client.req
+server.crt
+server.key
+server.pub
+server.req
