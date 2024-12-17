@@ -10,7 +10,7 @@ server-certificate:
 	openssl genpkey -out server.key -algorithm RSA -pkeyopt rsa_keygen_bits:2048
 	openssl rsa -pubout -in server.key -out server.pub
 	openssl req -key server.key -new -out server.req \
-		-subj="/C=IT/ST=Torino/L=Torino/O=Universita  di Torino/CN=www.plubmers.it/emailAddress=ca@eliseomartelli.it"
+		-subj="/C=IT/ST=Torino/L=Torino/O=Universita  di Torino/CN=www.plumbers.it/emailAddress=ca@eliseomartelli.it"
 	openssl x509 -days 365 -CA ca-bundle.crt -CAkey CA.key -CAcreateserial -CAserial ca.srl -req -in server.req -out server.crt
 
 .PHONY: client-certificate
