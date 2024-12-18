@@ -33,7 +33,7 @@ client-certificate:
 	openssl rsa -pubout -in client.key -out client.pub
 	
 	# Generate the CSR for the client using the custom config file
-	openssl req -key client.key -new -out client.req -config openssl.cnf -extensions v3_req \
+	openssl req -key client.key -new -out client.req -config openssl.conf -extensions v3_req \
 		-subj "/C=IT/ST=Torino/L=Torino/O=Universita di Torino/CN=Eliseo Martelli/"
 	
 	# Sign the client CSR with the CA private key to generate the client certificate
