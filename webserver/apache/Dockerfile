@@ -58,6 +58,9 @@ RUN chmod 600 /etc/ssl/mycerts/server.key
 RUN chmod 644 /etc/ssl/mycerts/server.crt
 
 COPY ./ssl.conf /etc/apache2/conf.d/ssl.conf
+COPY ./plumbersroute.conf /etc/apache2/conf.d/plumbersroute.conf
+COPY ./protectedroute.conf /etc/apache2/conf.d/protectedroute.conf
+COPY ./certroute.conf /etc/apache2/conf.d/certroute.conf
 
 COPY certroute/ certroute/
 

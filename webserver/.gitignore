@@ -11,3 +11,4 @@ server.crt
 server.key
 server.pub
 server.req
+.DS_Store
