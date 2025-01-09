@@ -1,5 +1,0 @@
-AuthType Basic
-AuthName "Restricted Access"
-AuthBasicProvider file
-AuthUserFile /etc/apache2/passwords
-Require user testuser

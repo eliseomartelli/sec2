@@ -1,0 +1,10 @@
+version: '3'
+services:
+  webserver:
+    build: ./apache
+    ports:
+      - "443:443"
+  ldap-1:
+    build: ./ldap
+  ldap-2:
+    build: ./ldap2

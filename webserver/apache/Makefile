@@ -41,3 +41,21 @@ client-certificate:
 	
 	# Convert the client certificate and private key to PKCS#12 format
 	openssl pkcs12 -export -out client.p12 -inkey client.key -in client.crt -certfile ca-bundle.crt
+
+.PHONY: invalid-client-certificate
+invalid-client-certificate:
+	# Generate the client private key
+	openssl genpkey -out invalid-client.key -algorithm RSA -pkeyopt rsa_keygen_bits:2048
+	
+	# Extract the public key from the client private key
+	openssl rsa -pubout -in invalid-client.key -out invalid-client.pub
+	
+	# Generate the CSR for the client using the custom config file
+	openssl req -key invalid-client.key -new -out invalid-client.req -config openssl.conf -extensions v3_req \
+		-subj "/C=IT/ST=Torino/L=Torino/O=Universita di Torino/CN=Invalid Martelli/"
+	
+	# Sign the client CSR with the CA private key to generate the client certificate
+	openssl x509 -days 365 -CA ca-bundle.crt -CAkey CA.key -CAcreateserial -CAserial ca.srl -req -in invalid-client.req -out invalid-client.crt
+	
+	# Convert the client certificate and private key to PKCS#12 format
+	openssl pkcs12 -export -out invalid-client.p12 -inkey invalid-client.key -in invalid-client.crt -certfile ca-bundle.crt

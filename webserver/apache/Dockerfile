@@ -11,6 +11,7 @@ RUN apk add --no-cache \
 		apache2-ssl \
 		php83 \
 		php83-apache2 \
+		php83-ldap \
 		;
 
 # Cambio la porta del server e imposto la 443, cambio il nome del server
@@ -30,7 +31,7 @@ COPY protectedroute/ protectedroute/
 # Creo un file delle password e ci insereisco un utente.
 RUN htpasswd -cbB /etc/apache2/passwords \
 	testuser \
-	asafepassword && \
+	testuser && \
 	\
 	htpasswd -bB /etc/apache2/passwords \
 	mario \
@@ -58,10 +59,10 @@ RUN chmod 600 /etc/ssl/mycerts/server.key
 RUN chmod 644 /etc/ssl/mycerts/server.crt
 
 COPY ./ssl.conf /etc/apache2/conf.d/ssl.conf
-COPY ./plumbersroute.conf /etc/apache2/conf.d/plumbersroute.conf
-COPY ./protectedroute.conf /etc/apache2/conf.d/protectedroute.conf
-COPY ./certroute.conf /etc/apache2/conf.d/certroute.conf
+
+COPY ./server.conf /etc/apache2/conf.d/server.conf
 
 COPY certroute/ certroute/
+COPY ldapclient/ ldapclient/
 
 CMD ["httpd", "-D", "FOREGROUND"]
